@@ -17,7 +17,7 @@ const start = async () => {
   }
   console.log("Connected to mongoDB");
   app.listen(3000, () => {
-    console.log("Auth service listening in port 3000.");
+    console.log("Tickets service listening in port 3000.");
   });
 };
 
