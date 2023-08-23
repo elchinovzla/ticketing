@@ -29,7 +29,7 @@ afterAll(async () => {
 
 global.signin = () => {
   const payload = {
-    id: "hdfgioheroigh",
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: "email@test.com",
   };
   const token = jwt.sign(payload, process.env.JWT_KEY!);
