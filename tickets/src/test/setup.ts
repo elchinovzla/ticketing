@@ -1,16 +1,16 @@
-import jwt from "jsonwebtoken";
-import { MongoMemoryServer } from "mongodb-memory-server";
-import mongoose from "mongoose";
+import jwt from 'jsonwebtoken';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
 
 declare global {
   var signin: () => string[];
 }
 
-jest.mock("../nats-wrapper");
+jest.mock('../nats-wrapper');
 
 let mongo: MongoMemoryServer;
 beforeAll(async () => {
-  process.env.JWT_KEY = "asdf";
+  process.env.JWT_KEY = 'asdf';
 
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
@@ -33,11 +33,11 @@ afterAll(async () => {
 global.signin = () => {
   const payload = {
     id: new mongoose.Types.ObjectId().toHexString(),
-    email: "email@test.com",
+    email: 'email@test.com',
   };
   const token = jwt.sign(payload, process.env.JWT_KEY!);
   const session = { jwt: token };
   const sessionJSON = JSON.stringify(session);
-  const base64 = Buffer.from(sessionJSON).toString("base64");
+  const base64 = Buffer.from(sessionJSON).toString('base64');
   return [`session=${base64}`];
 };
