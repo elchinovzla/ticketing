@@ -21,8 +21,8 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
       throw new Error('Ticket not found in order service');
     }
 
-    const { title, price } = data;
-    ticket.set({ title, price });
+    const { title, price, version } = data;
+    ticket.set({ title, price, version });
     await ticket.save();
 
     msg.ack();
