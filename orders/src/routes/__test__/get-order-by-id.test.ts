@@ -1,10 +1,12 @@
-import request from "supertest";
-import { app } from "../../app";
-import { Ticket } from "../../models/ticket";
+import mongoose from 'mongoose';
+import request from 'supertest';
+import { app } from '../../app';
+import { Ticket } from '../../models/ticket';
 
-it("fetches the order", async () => {
+it('fetches the order', async () => {
   const ticket = Ticket.build({
-    title: "test",
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: 'test',
     price: 10,
   });
   await ticket.save();
@@ -12,23 +14,24 @@ it("fetches the order", async () => {
   const user = global.signin();
 
   const { body: order } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", user)
+    .post('/api/orders')
+    .set('Cookie', user)
     .send({ ticketId: ticket.id })
     .expect(201);
 
   const { body: fetchedOrder } = await request(app)
     .get(`/api/orders/${order.id}`)
-    .set("Cookie", user)
+    .set('Cookie', user)
     .send()
     .expect(200);
 
   expect(fetchedOrder.id).toEqual(order.id);
 });
 
-it("returns an error if one user attempts to fetch an unathorized order", async () => {
+it('returns an error if one user attempts to fetch an unathorized order', async () => {
   const ticket = Ticket.build({
-    title: "test",
+    id: new mongoose.Types.ObjectId().toHexString(),
+    title: 'test',
     price: 10,
   });
   await ticket.save();
@@ -36,14 +39,14 @@ it("returns an error if one user attempts to fetch an unathorized order", async 
   const user = global.signin();
 
   const { body: order } = await request(app)
-    .post("/api/orders")
-    .set("Cookie", user)
+    .post('/api/orders')
+    .set('Cookie', user)
     .send({ ticketId: ticket.id })
     .expect(201);
 
   await request(app)
     .get(`/api/orders/${order.id}`)
-    .set("Cookie", global.signin())
+    .set('Cookie', global.signin())
     .send()
     .expect(401);
 });
