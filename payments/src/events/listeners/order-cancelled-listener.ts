@@ -25,7 +25,7 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
       throw new Error('Order not found');
     }
 
-    await order!.set({ status: OrderStatus.Cancelled }).save();
+    await order.set({ status: OrderStatus.Cancelled }).save();
 
     msg.ack();
   }
