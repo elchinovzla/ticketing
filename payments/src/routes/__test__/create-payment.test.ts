@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
 import { Order } from '../../models/order';
+import { Payment } from '../../models/payment';
 import { stripe } from '../../stripe';
 
 jest.mock('../../stripe');
@@ -78,8 +79,14 @@ it('returns a 201 with valid inputs', async () => {
     .send({ token: 'tok_visa', orderId: order.id })
     .expect(201);
 
-  const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0];
-  expect(chargeOptions.source).toEqual('tok_visa');
-  expect(chargeOptions.amount).toEqual(1_000);
-  expect(chargeOptions.currency).toEqual('usd');
+  expect(stripe.charges.create).toHaveBeenCalledWith({
+    currency: 'usd',
+    amount: 1_000,
+    source: 'tok_visa',
+  });
+
+  const payment = await Payment.findOne({
+    orderId: order.id,
+  });
+  expect(payment).not.toBeNull();
 });
