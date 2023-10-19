@@ -1,7 +1,7 @@
 {
   "name": "auth",
   "version": "1.0.0",
-  "description": "service responsible to manage the user session",
+  "description": "Service responsible to manage the user session",
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev src/index.ts",
