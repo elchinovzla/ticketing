@@ -2,6 +2,8 @@ import { OrderCreatedListener } from './events/listeners/order-created-listener'
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
+  console.log('Starting out expiration service...');
+
   if (!process.env.NATS_CLUSTER) {
     throw new Error('NATS cluster should be define');
   }
